@@ -60,9 +60,13 @@ if (-e "./pwd") {
 	if ($pwd ==$realpasswd) {
 		print "<h1>Welcome, Admin!</h3>";
 		$linkstr = "admin=$pwd&";
+		my $entry="";
 		if ($cgi->param('e')) {
-		 	open (LOGENTRY, ">$this_year/$mon/$mday/$ts") or die "Could not open file $!";
- 			my $entry = $cgi->param('e');
+			$entry = $cgi->param('e');	
+		}
+		if ($cgi->param('ts')) {
+	
+			open (LOGENTRY, ">$this_year/$mon/$mday/$ts") or die "Could not open file $!";
 			print LOGENTRY $entry;	
    			close (LOGENTRY);
 		        print "<h2>".DateStamp ($ts)."</h2>";

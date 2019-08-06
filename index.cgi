@@ -61,10 +61,10 @@ if (-e "./pwd") {
 		$linkstr = "admin=$pwd&";
 		if ($cgi->param('e')) {
 		 	open (LOGENTRY, ">$this_year/$mon/$mday/$ts") or die "Could not open file $!";
- 			my $entry = to_html($cgi->param('e'));
+ 			my $entry = $cgi->param('e');
 			print LOGENTRY $entry;	
    			close (LOGENTRY);
-		        print "<h2>"+DateStamp ($ts)+"</h2>";
+		        print "<h2>".DateStamp ($ts)."</h2>";
 			print "<li><a href=\"/?"+$linkstr+"ts=$ts\">[l]</a>";
 			ListEntry ("$this_year/$mon/$mday/$ts");
    			print "<h3>Edit:</h3><form action=\"/\" method=\"POST\"><textarea cols=\"80\" rows=\"10\" name=\"e\">";
@@ -123,8 +123,6 @@ sub ListBlog {
 }
 sub to_html {
 	my $formtext = shift;
-	$formtext =~ s/(\r)/<br>/g;
-	$formtext =~ s/(\n)/<br\/>/g;
 	$formtext =~ s/(&)/&amp;/g;
 	$formtext =~ s/(\")/&quot;/g;
 	$formtext =~ s/(\')/&apos;/g;
@@ -137,6 +135,8 @@ sub to_html {
 	$formtext =~ s/(Ä)/&Auml;/g;
         $formtext =~ s/(Ö)/&Ouml;/g;
         $formtext =~ s/(Ü)/&Uuml;/g;
+        $formtext =~ s/(\r)/<br>/g;
+        $formtext =~ s/(\n)/<br\/>/g;
 
 
 

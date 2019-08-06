@@ -58,6 +58,7 @@ if (-e "./pwd") {
                 mkdir ("$this_year/$mon/$mday");
         }
 	if ($pwd ==$realpasswd) {
+		print "<h1>Welcome, Admin!</h3>";
 		$linkstr = "admin=$pwd&";
 		if ($cgi->param('e')) {
 		 	open (LOGENTRY, ">$this_year/$mon/$mday/$ts") or die "Could not open file $!";

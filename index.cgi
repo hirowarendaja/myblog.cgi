@@ -20,13 +20,20 @@ if (-e "./pwd") {
     my $linkstr = "";
     if ($cgi->param("ts")) {
         $ts = $cgi->param('ts');
-	$time_now = $maxtime - hex($ts); 
+	#	$time_now = $maxtime - hex($ts); 
     }
+    $time_now = $maxtime - hex($ts);
     my @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
     my @days = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($time_now);
+    if ($mon <10) {
+	    #	$mon = "0"+$mon;	    
+    }
+    if ($mday <10) {
+	    #	$mday = "0"+$mday; 
+    }
     my $this_year = 1900+ $year;
-    print "Timenow:$time_now maxtime:$maxtime   $mday $months[$mon] $days[$wday]\n Timestamp:$ts ThisYear:$this_year\n";
+    #    print "Timenow:$time_now maxtime:$maxtime   $mday $months[$mon] $days[$wday]\n Timestamp:$ts ThisYear:$this_year\n";
     if ($cgi->param("y")) {
 	$year =$cgi->param('y');	
     }
@@ -56,34 +63,59 @@ if (-e "./pwd") {
 		 	open (LOGENTRY, ">$this_year/$mon/$mday/$ts") or die "Could not open file $!";
  			my $entry = to_html($cgi->param('e'));
 			print LOGENTRY $entry;	
-   			close (LOGENTRY); 
-   		}
+   			close (LOGENTRY);
+		        print "<h2>"+DateStamp ($ts)+"</h2>";
+			print "<li><a href=\"/?"+$linkstr+"ts=$ts\">[l]</a>";
+			ListEntry ("$this_year/$mon/$mday/$ts");
+   			print "<h3>Edit:</h3><form action=\"/\" method=\"POST\"><textarea cols=\"80\" rows=\"10\" name=\"e\">";
+			ListEntry ("$this_year/$mon/$mday/$ts");		
+			print "</textarea><br/><input type=\"hidden\" value=\"$pwd\" name=\"admin\">";
+			print "<input type=\"hidden\" value=\"$ts\" name=\"ts\">";
+			print "<input type=\"submit\" value=\"Submit\"></form>";
+		
+		
+		
+		}
 	} else { ## Not authorized 
-		ListBlog ($this_year, $mon, $mday);
+		#		ListBlog ($this_year, $mon);
 	} 
     }
+    ListBlog ($this_year, $mon);
+
 } else {
 	print "Content-type:text/html\r\n\r\n<html lang=\"en\"><meta charset=\"utf-8\">\n<body><h2>This blog seems unconfigured, please contact the administrator!</h2></body></html>";
 	exit;
 }
+sub DateStamp {
+    my $timestamp = shift;
+    my $maxtime = 2147483647;
+    my @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+    my @days = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
+    my $time_n = $maxtime - hex($timestamp);
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($time_n);
+    my $this_year = 1900+ $year;
+    return ("$days[$wday] $months[$mon] $mday $this_year");
 
+}
 sub ListEntry {
 	my $targetentry = shift;
-	open (BLOGENTRY, "<$targetentry") or die "Co
-uld not open file $!";
-	while (<BLOGENTRY>) { print "$_"; }
+	open (BLOGENTRY, "<$targetentry") or die "Could not open file $targetentry $!";
+	while (<BLOGENTRY>) { 
+		print "$_"; 
+	}
 }
 
 sub ListBlog {
-	my ($year, $month, $day) = shift;
+	my ($year, $month) = shift;
 	opendir my $mydir, "./$year/$month/";
 	my @dirs = grep {-d "./$year/$month/" && ! /^\.{1,2}$/} readdir($mydir);
 	foreach my $dir (@dirs) {
-		opendir my $d, "$dir" or die "Cannot open directory: $!";
+		opendir my $d, "./$year/$month/$dir" or die "Cannot open directory:  ./$year/$month/$dir $!";
 		my @files = readdir $d;
-		closedir $dir;
+		closedir $d;
 		foreach my $file (@files) {
-			ListEntry ($file);	
+			print $file;
+			ListEntry ("./$year/$month/$dir/$file");	
 		}
 	}
 

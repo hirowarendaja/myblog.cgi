@@ -22,8 +22,8 @@ if (-e "./pwd") {
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
     my $this_year = 1900+ $year;
     my $maxtime = 2147483647;
-    my $ts = printf("%X", ($maxtime - $time_now));
-    print "$mday $months[$mon] $days[$wday] $ts $this_year\n";
+    my $ts = sprintf("%X", ($maxtime - $time_now));
+    print "Timenow:$time_now maxtime:$maxtime   $mday $months[$mon] $days[$wday]\n Timestamp:$ts ThisYear:$this_year\n";
     my $cgi = new CGI();
     if ($cgi->param("ts")) {
 	$ts = $cgi->param('ts');	
@@ -51,7 +51,7 @@ if (-e "./pwd") {
         }
 	open (LOGENTRY, ">$this_year/$mon/$mday/$ts") or die "Could not open file $!";
  	my $entry = to_html($cgi->param('e'));
-	print LOGENTRY, $entry;	
+	print LOGENTRY $entry;	
    	close (LOGENTRY); 
     }
 

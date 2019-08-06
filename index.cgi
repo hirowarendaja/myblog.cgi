@@ -69,9 +69,9 @@ if (-e "./pwd") {
 		}
 		if ($cgi->param('ts')) {
 		        print "<h2>".DateStamp ($ts)."</h2>";
-			print "<li><a href=\"/?".$linkstr."ts=$ts\">[l]</a>";
+			print "<ul><li><a href=\"/?".$linkstr."ts=$ts\">[l]</a>";
 			ListEntry ("$this_year/$mon/$mday/$ts", 1);
-   			print "<h3>Edit:</h3><form action=\"/\" method=\"POST\"><textarea cols=\"80\" rows=\"10\" name=\"e\">";
+   			print "</ul><h3>Edit:</h3><form action=\"/\" method=\"POST\"><textarea cols=\"80\" rows=\"10\" name=\"e\">";
 			ListEntry ("$this_year/$mon/$mday/$ts", 0);		
 			print "</textarea><br/><input type=\"hidden\" value=\"$pwd\" name=\"admin\">";
 			print "<input type=\"hidden\" value=\"$ts\" name=\"ts\">";

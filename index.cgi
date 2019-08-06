@@ -81,7 +81,7 @@ if (-e "./pwd") {
 	} 
     }
     #    print "LB $this_year, $mon";
-    ListBlog ($this_year, $mon);
+    ListBlog ($this_year, $mon, $linkstr);
 
 } else {
 	print "Content-type:text/html\r\n\r\n<html lang=\"en\"><meta charset=\"utf-8\">\n<body><h2>This blog seems unconfigured, please contact the administrator!</h2></body></html>";
@@ -110,6 +110,7 @@ sub ListEntry {
 sub ListBlog {
 	my $year = shift;
         my $month= shift;
+	my $linkstr = shift;
 	#	print "ListBlog y$year  m$month _ ";
 	opendir my $mydir, "./$year/$month/";
 	my @dirs = grep {-d "./$year/$month/" && ! /^\.{1,2}$/} readdir($mydir);
@@ -119,7 +120,7 @@ sub ListBlog {
 		closedir $d;
 		print "<h2>".DateStamp(pop(@files))."</h2><ul>";
 		foreach my $file (@files) {
-			print "<li><a href=\"?ts=$file\">[l]</a> ";
+			print "<li><a href=\"?".$linkstr."ts=$file\">[l]</a> ";
 			ListEntry ("./$year/$month/$dir/$file");	
 		}
 		print "</ul>";

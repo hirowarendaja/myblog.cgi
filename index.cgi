@@ -69,8 +69,8 @@ if (-e "./pwd") {
 		}
 		if ($cgi->param('ts')) {
 		        print "<h2>".DateStamp ($ts)."</h2>";
-			print "<ul><li><a href=\"/?".$linkstr."ts=$ts\">[l]</a>";
-			ListEntry ("$this_year/$mon/$mday/$ts", 1);
+			print "<ul><li><a href=\"/?".$linkstr."ts=$ts\">[l]</a> ";
+			ListEntry ("$this_year/$mon/$mday/$ts", 0);
    			print "</ul><h3>Edit:</h3><form action=\"/\" method=\"POST\"><textarea cols=\"80\" rows=\"10\" name=\"e\">";
 			ListEntry ("$this_year/$mon/$mday/$ts", 0);		
 			print "</textarea><br/><input type=\"hidden\" value=\"$pwd\" name=\"admin\">";
@@ -128,7 +128,7 @@ sub ListBlog {
 		print "<h2>".DateStamp(pop(@files))."</h2><ul>";
 		foreach my $file (@files) {
 			print "<li><a href=\"?".$linkstr."ts=$file\">[l]</a> ";
-			ListEntry ("./$year/$month/$dir/$file", 1);	
+			ListEntry ("./$year/$month/$dir/$file", 0);	
 		}
 		print "</ul>";
 	}

@@ -151,7 +151,7 @@ sub to_html {
         $formtext =~ s/(Ü)/&Uuml;/g;
         $formtext =~ s/(\r)/<br>/g;
         $formtext =~ s/(\n)/<br\/>/g;
-
+	$formtext =~ s/<br><br\/>/<br>/g;
 
 
 	return ($formtext);

@@ -27,10 +27,10 @@ if (-e "./pwd") {
     my @days = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($time_now);
     if ($mon <10) {
-	    #	$mon = "0"+$mon;	    
+	    	$mon = "0".$mon;	    
     }
     if ($mday <10) {
-	    #	$mday = "0"+$mday; 
+	    	$mday = "0".$mday; 
     }
     my $this_year = 1900+ $year;
     #    print "Timenow:$time_now maxtime:$maxtime   $mday $months[$mon] $days[$wday]\n Timestamp:$ts ThisYear:$this_year\n";
@@ -65,7 +65,7 @@ if (-e "./pwd") {
 			print LOGENTRY $entry;	
    			close (LOGENTRY);
 		        print "<h2>".DateStamp ($ts)."</h2>";
-			print "<li><a href=\"/?"+$linkstr+"ts=$ts\">[l]</a>";
+			print "<li><a href=\"/?".$linkstr."ts=$ts\">[l]</a>";
 			ListEntry ("$this_year/$mon/$mday/$ts");
    			print "<h3>Edit:</h3><form action=\"/\" method=\"POST\"><textarea cols=\"80\" rows=\"10\" name=\"e\">";
 			ListEntry ("$this_year/$mon/$mday/$ts");		

@@ -67,9 +67,9 @@ if (-e "./pwd") {
    			close (LOGENTRY);
 		        print "<h2>".DateStamp ($ts)."</h2>";
 			print "<li><a href=\"/?".$linkstr."ts=$ts\">[l]</a>";
-			ListEntry ("$this_year/$mon/$mday/$ts");
+			ListEntry ("$this_year/$mon/$mday/$ts", 1);
    			print "<h3>Edit:</h3><form action=\"/\" method=\"POST\"><textarea cols=\"80\" rows=\"10\" name=\"e\">";
-			ListEntry ("$this_year/$mon/$mday/$ts");		
+			ListEntry ("$this_year/$mon/$mday/$ts", 0);		
 			print "</textarea><br/><input type=\"hidden\" value=\"$pwd\" name=\"admin\">";
 			print "<input type=\"hidden\" value=\"$ts\" name=\"ts\">";
 			print "<input type=\"submit\" value=\"Submit\"></form>";
@@ -101,10 +101,13 @@ sub DateStamp {
 }
 sub ListEntry {
 	my $targetentry = shift;
+	my $htmlencode = shift;
 	#	print "ListEntry $targetentry";
 	open (BLOGENTRY, "<$targetentry") or die "Could not open file $targetentry $!";
 	while (<BLOGENTRY>) { 
-		print to_html($_); 
+		if ($htmlencode) {
+		  print to_html($_); 
+		} else { print $_;}
 	}
 }
 
@@ -122,7 +125,7 @@ sub ListBlog {
 		print "<h2>".DateStamp(pop(@files))."</h2><ul>";
 		foreach my $file (@files) {
 			print "<li><a href=\"?".$linkstr."ts=$file\">[l]</a> ";
-			ListEntry ("./$year/$month/$dir/$file");	
+			ListEntry ("./$year/$month/$dir/$file", 1);	
 		}
 		print "</ul>";
 	}

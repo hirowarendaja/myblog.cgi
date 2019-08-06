@@ -135,7 +135,7 @@ sub ListBlog {
 		closedir $d;
 		print "<h2>".DateStamp(pop(@files))."</h2><ul>";
 		foreach my $file (@files) {
-			print "<li><a href=\"?".$linkstr."ts=$file\" alt=\"".TimeStamp($file)."\">[l]</a> ";
+			print "<li><a href=\"?".$linkstr."ts=$file\" title=\"".TimeStamp($file)."\">[l]</a> ";
 			ListEntry ("./$year/$month/$dir/$file", 0);	
 		}
 		print "</ul>";

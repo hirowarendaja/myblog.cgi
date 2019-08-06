@@ -58,8 +58,8 @@ if (-e "./pwd") {
                 mkdir ("$this_year/$mon/$mday");
         }
 	if ($pwd ==$realpasswd) {
-		print "<h1>Welcome, Admin!</h3>";
 		$linkstr = "admin=$pwd&";
+		print "<h1>Welcome, Admin! <a href=\"?".$linkstr."e=New\"> create new logentry</a></h3>";
 		my $entry="";
 		if ($cgi->param('e')) {
 			$entry = $cgi->param('e');	
@@ -91,6 +91,14 @@ if (-e "./pwd") {
 	print "Content-type:text/html\r\n\r\n<html lang=\"en\"><meta charset=\"utf-8\">\n<body><h2>This blog seems unconfigured, please contact the administrator!</h2></body></html>";
 	exit;
 }
+sub TimeStamp {
+    my $timestamp = shift;
+    my $maxtime = 2147483647;
+    my $time_n = $maxtime - hex($timestamp);
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($time_n);
+    return ("$hour:$min.$sec");
+}
+
 sub DateStamp {
     my $timestamp = shift;
     my $maxtime = 2147483647;
@@ -127,7 +135,7 @@ sub ListBlog {
 		closedir $d;
 		print "<h2>".DateStamp(pop(@files))."</h2><ul>";
 		foreach my $file (@files) {
-			print "<li><a href=\"?".$linkstr."ts=$file\">[l]</a> ";
+			print "<li><a href=\"?".$linkstr."ts=$file\" alt=\"".TimeStamp($file)."\">[l]</a> ";
 			ListEntry ("./$year/$month/$dir/$file", 0);	
 		}
 		print "</ul>";

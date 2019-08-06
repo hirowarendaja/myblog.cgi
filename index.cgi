@@ -2,8 +2,6 @@
 use CGI;
 use strict;
 
-
-
 if (-e "./pwd") {
     print "Content-type:text/html\r\n\r\n";
     print "<html lang=\"en\"><meta charset=\"utf-8\">\n";
@@ -20,13 +18,9 @@ if (-e "./pwd") {
     my $linkstr = "";
     if ($cgi->param("ts")) {
         $ts = $cgi->param('ts');
-	#	$time_now = $maxtime - hex($ts); 
     }
     $time_now = $maxtime - hex($ts);
-    my @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
-    my @days = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($time_now);
-    #    print "Timenow:$time_now maxtime:$maxtime   $mday $months[$mon] $days[$wday]\n Timestamp:$ts ThisYear:$this_year\n";
     if ($cgi->param("y")) {
 	$year =$cgi->param('y');	
     }
@@ -40,29 +34,27 @@ if (-e "./pwd") {
     if ($mday <10) {
                 $mday = "0".$mday;
     }
-    if ($cgi->param("admin")) { ############ Insert entry
+    if ($cgi->param("admin")) { ###
 	open (PWDFILE, "<./pwd");	
 	my $realpasswd =<PWDFILE>;
 	chomp $realpasswd; 
-	#read (PWDFILE, $realpasswd);
 	close (PWDFILE);
  	my $pwd=$cgi->param("admin");
-		
-	if (!(-d $this_year)) {
-		mkdir ($this_year);
-    	}
-	if (!(-d "$this_year/$mon")) {
-		mkdir ("$this_year/$mon");
-	}
-	if (!(-d "$this_year/$mon/$mday")) {
-                mkdir ("$this_year/$mon/$mday");
-        }
 	if ($pwd ==$realpasswd) {
 		$linkstr = "admin=$pwd&";
 		print "<h1>Welcome, Admin! <a href=\"?".$linkstr."e=New\"> create new logentry</a></h3>";
 		my $entry="";
-		if ($cgi->param('e')) {
+		if ($cgi->param('e')) {   #### insert entry
 			$entry = $cgi->param('e');	
+		        if (!(-d $this_year)) {
+        		        mkdir ($this_year);
+		        }
+		        if (!(-d "$this_year/$mon")) {
+	        	        mkdir ("$this_year/$mon");
+		        }
+		        if (!(-d "$this_year/$mon/$mday")) {
+	        	        mkdir ("$this_year/$mon/$mday");
+		        }
                         open (LOGENTRY, ">$this_year/$mon/$mday/$ts") or die "Could not open file $!";
                     	print LOGENTRY $entry;
                     	close (LOGENTRY);
@@ -76,21 +68,17 @@ if (-e "./pwd") {
 			print "</textarea><br/><input type=\"hidden\" value=\"$pwd\" name=\"admin\">";
 			print "<input type=\"hidden\" value=\"$ts\" name=\"ts\">";
 			print "<input type=\"submit\" value=\"Submit\"></form>";
-		
-		
-		
 		}
 	} else { ## Not authorized 
-		#		ListBlog ($this_year, $mon);
 	} 
     }
-    #    print "LB $this_year, $mon";
     ListBlog ($this_year, $mon, $linkstr);
 
 } else {
 	print "Content-type:text/html\r\n\r\n<html lang=\"en\"><meta charset=\"utf-8\">\n<body><h2>This blog seems unconfigured, please contact the administrator!</h2></body></html>";
 	exit;
 }
+
 sub TimeStamp {
     my $timestamp = shift;
     my $maxtime = 2147483647;
@@ -113,7 +101,6 @@ sub DateStamp {
 sub ListEntry {
 	my $targetentry = shift;
 	my $htmlencode = shift;
-	#	print "ListEntry $targetentry";
 	open (BLOGENTRY, "<$targetentry") or die "Could not open file $targetentry $!";
 	while (<BLOGENTRY>) { 
 		if ($htmlencode) {
@@ -126,7 +113,6 @@ sub ListBlog {
 	my $year = shift;
         my $month= shift;
 	my $linkstr = shift;
-	#	print "ListBlog y$year  m$month _ ";
 	opendir my $mydir, "./$year/$month/";
 	my @dirs = grep {-d "./$year/$month/" && ! /^\.{1,2}$/} readdir($mydir);
 	foreach my $dir (@dirs) {
@@ -140,8 +126,6 @@ sub ListBlog {
 		}
 		print "</ul>";
 	}
-
-
 }
 sub to_html {
 	my $formtext = shift;
@@ -160,8 +144,5 @@ sub to_html {
         $formtext =~ s/(\r)/<br>/g;
         $formtext =~ s/(\n)/<br\/>/g;
 	$formtext =~ s/<br><br\/>/<br>/g;
-
-
 	return ($formtext);
-
 }

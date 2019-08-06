@@ -26,19 +26,19 @@ if (-e "./pwd") {
     my @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
     my @days = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($time_now);
-    if ($mon <10) {
-	    	$mon = "0".$mon;	    
-    }
-    if ($mday <10) {
-	    	$mday = "0".$mday; 
-    }
-    my $this_year = 1900+ $year;
     #    print "Timenow:$time_now maxtime:$maxtime   $mday $months[$mon] $days[$wday]\n Timestamp:$ts ThisYear:$this_year\n";
     if ($cgi->param("y")) {
 	$year =$cgi->param('y');	
     }
+    my $this_year = 1900+ $year;
     if ($cgi->param("m")) {
 	$mon = $cgi->param('m');
+    }
+    if ($mon <10) {
+                $mon = "0".$mon;
+    }
+    if ($mday <10) {
+                $mday = "0".$mday;
     }
     if ($cgi->param("admin")) { ############ Insert entry
 	open (PWDFILE, "<./pwd");	
@@ -80,6 +80,7 @@ if (-e "./pwd") {
 		#		ListBlog ($this_year, $mon);
 	} 
     }
+    #    print "LB $this_year, $mon";
     ListBlog ($this_year, $mon);
 
 } else {
@@ -99,6 +100,7 @@ sub DateStamp {
 }
 sub ListEntry {
 	my $targetentry = shift;
+	print "ListEntry $targetentry";
 	open (BLOGENTRY, "<$targetentry") or die "Could not open file $targetentry $!";
 	while (<BLOGENTRY>) { 
 		print "$_"; 
@@ -106,17 +108,20 @@ sub ListEntry {
 }
 
 sub ListBlog {
-	my ($year, $month) = shift;
+	my $year = shift;
+        my $month= shift;
+	#	print "ListBlog y$year  m$month _ ";
 	opendir my $mydir, "./$year/$month/";
 	my @dirs = grep {-d "./$year/$month/" && ! /^\.{1,2}$/} readdir($mydir);
 	foreach my $dir (@dirs) {
 		opendir my $d, "./$year/$month/$dir" or die "Cannot open directory:  ./$year/$month/$dir $!";
 		my @files = readdir $d;
 		closedir $d;
+		print "<h2>".DateStamp(pop(@files))."</h2><ul>";
 		foreach my $file (@files) {
-			print $file;
 			ListEntry ("./$year/$month/$dir/$file");	
 		}
+		print "</ul>";
 	}
 
 

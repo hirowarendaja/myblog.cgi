@@ -100,7 +100,7 @@ sub DateStamp {
 }
 sub ListEntry {
 	my $targetentry = shift;
-	print "ListEntry $targetentry";
+	#	print "ListEntry $targetentry";
 	open (BLOGENTRY, "<$targetentry") or die "Could not open file $targetentry $!";
 	while (<BLOGENTRY>) { 
 		print "$_"; 
@@ -115,10 +115,11 @@ sub ListBlog {
 	my @dirs = grep {-d "./$year/$month/" && ! /^\.{1,2}$/} readdir($mydir);
 	foreach my $dir (@dirs) {
 		opendir my $d, "./$year/$month/$dir" or die "Cannot open directory:  ./$year/$month/$dir $!";
-		my @files = readdir $d;
+		my @files = grep {-d "./$year/$month/$dir/" && ! /^\.{1,2}$/} readdir $d;
 		closedir $d;
 		print "<h2>".DateStamp(pop(@files))."</h2><ul>";
 		foreach my $file (@files) {
+			print "<li><a href=\"?ts=$file\">[l]</a> ";
 			ListEntry ("./$year/$month/$dir/$file");	
 		}
 		print "</ul>";

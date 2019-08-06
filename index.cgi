@@ -104,7 +104,7 @@ sub ListEntry {
 	#	print "ListEntry $targetentry";
 	open (BLOGENTRY, "<$targetentry") or die "Could not open file $targetentry $!";
 	while (<BLOGENTRY>) { 
-		print "$_"; 
+		print to_html($_); 
 	}
 }
 

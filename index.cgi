@@ -72,9 +72,19 @@ if (-e "./pwd") {
 	} else { ## Not authorized 
 	} 
     }
+    else if ($cgi->param('ts')) {
+	my $ts = $cgi->param('ts');
+	print "<h2>".DateStamp($ts)."</h2><ul>";	
+	my $maxtime = 2147483647;
+    	my $time_n = $maxtime - hex($ts);
+    	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($time_n);
+    	my $this_year = 1900+ $year;
+        ListEntry ("./$year/$month/$dir/$file", 0);
+    }
+
     ListBlog ($this_year, $mon, $linkstr);
 
-} else {
+} else { #### No pwd file
 	print "Content-type:text/html\r\n\r\n<html lang=\"en\"><meta charset=\"utf-8\">\n<body><h2>This blog seems unconfigured, please contact the administrator!</h2></body></html>";
 	exit;
 }

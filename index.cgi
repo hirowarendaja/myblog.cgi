@@ -117,7 +117,7 @@ sub ListBlog {
 	my @dirs = grep {-d "./$year/$month/" && ! /^\.{1,2}$/} readdir($mydir);
 	foreach my $dir (@dirs) {
 		opendir my $d, "./$year/$month/$dir" or die "Cannot open directory:  ./$year/$month/$dir $!";
-		my @files = sort { $a > $b } grep {-d "./$year/$month/$dir/" && ! /^\.{1,2}$/} readdir $d;
+		my @files = sort { 1 } grep {-d "./$year/$month/$dir/" && ! /^\.{1,2}$/} readdir $d;
 		closedir $d;
 		my @popfiles= @files;
 		print "<h2>".DateStamp(pop(@popfiles))."</h2><ul>";

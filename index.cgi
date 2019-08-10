@@ -85,12 +85,11 @@ if (-e "./pwd") {
     	if ($mday <10) {
                 $mday = "0".$mday;
     	}
-        print "./$this_year/$mon/$mday/$ts";
-	ListEntry ("./$this_year/$mon/$mday/$ts", 0);
+	ListEntryPlus ("./$this_year/$mon/$mday/$ts", 0);
+    } else {
+
+       	ListBlog ($this_year, $mon, $linkstr);
     }
-
-    ListBlog ($this_year, $mon, $linkstr);
-
 } else { #### No pwd file
 	print "Content-type:text/html\r\n\r\n<html lang=\"en\"><meta charset=\"utf-8\">\n<body><h2>This blog seems unconfigured, please contact the administrator!</h2></body></html>";
 	exit;
@@ -126,6 +125,15 @@ sub ListEntry {
 	}
 }
 
+sub ListEntryPlus {
+ my $directory = shift;
+ my $tohtml = shift;
+ my $fn = shift; 
+ my $linkstr = shift;
+ print "<li><a href=\"?".$linkstr."ts=$fn\" title=\"".TimeStamp($fn)."\">[l]</a> ";
+ ListEntry ("$directory$fn", $tohtml);
+}
+
 sub ListBlog {
 	my $year = shift;
         my $month= shift;
@@ -140,8 +148,7 @@ sub ListBlog {
 		my @popfiles= @files;
 		print "<h2>".DateStamp(pop(@popfiles))."</h2><ul>";
 		foreach my $file (@files) {
-			print "<li><a href=\"?".$linkstr."ts=$file\" title=\"".TimeStamp($file)."\">[l]</a> ";
-			ListEntry ("./$year/$month/$dir/$file", 0);	
+			ListEntryPlus ("./$year/$month/$dir/", 0,"$file", $linkstr);	
 		}
 		print "</ul>";
 	}

@@ -72,14 +72,14 @@ if (-e "./pwd") {
 	} else { ## Not authorized 
 	} 
     }
-    else if ($cgi->param('ts')) {
+    elsif ($cgi->param('ts')) {
 	my $ts = $cgi->param('ts');
 	print "<h2>".DateStamp($ts)."</h2><ul>";	
 	my $maxtime = 2147483647;
     	my $time_n = $maxtime - hex($ts);
     	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($time_n);
     	my $this_year = 1900+ $year;
-        ListEntry ("./$year/$month/$dir/$file", 0);
+        ListEntry ("./$this_year/$mon/$mday/$ts", 0);
     }
 
     ListBlog ($this_year, $mon, $linkstr);

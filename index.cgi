@@ -79,7 +79,8 @@ if (-e "./pwd") {
     	my $time_n = $maxtime - hex($ts);
     	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($time_n);
     	my $this_year = 1900+ $year;
-        ListEntry ("./$this_year/$mon/$mday/$ts", 0);
+        print "./$this_year/$mon/$mday/$ts";
+	ListEntry ("./$this_year/$mon/$mday/$ts", 0);
     }
 
     ListBlog ($this_year, $mon, $linkstr);

@@ -34,14 +34,14 @@ if (-e "./pwd") {
     if ($mday <10) {
                 $mday = "0".$mday;
     }
-    if ($cgi->param("admin")) { ###
+    if ($cgi->param("a")) { ###
 	open (PWDFILE, "<./pwd");	
 	my $realpasswd =<PWDFILE>;
 	chomp $realpasswd; 
 	close (PWDFILE);
- 	my $pwd=$cgi->param("admin");
+ 	my $pwd=$cgi->param("a");
 	if ($pwd ==$realpasswd) {
-		$linkstr = "admin=$pwd&";
+		$linkstr = "a=$pwd&";
 		print "<h1>Welcome, Admin! <a href=\"?".$linkstr."e=New\"> create new logentry</a></h3>";
 		my $entry="";
 		if ($cgi->param('e')) {   #### insert entry
@@ -65,7 +65,7 @@ if (-e "./pwd") {
 			ListEntry ("$this_year/$mon/$mday/$ts", 0);
    			print "</ul><h3>Edit:</h3><form action=\"/\" method=\"POST\"><textarea cols=\"80\" rows=\"10\" name=\"e\">";
 			ListEntry ("$this_year/$mon/$mday/$ts", 0);		
-			print "</textarea><br/><input type=\"hidden\" value=\"$pwd\" name=\"admin\">";
+			print "</textarea><br/><input type=\"hidden\" value=\"$pwd\" name=\"a\">";
 			print "<input type=\"hidden\" value=\"$ts\" name=\"ts\">";
 			print "<input type=\"submit\" value=\"Submit\"></form>";
 		}
@@ -124,7 +124,7 @@ sub ListBlog {
         my $month= shift;
 	my $linkstr = shift;
 	opendir my $mydir, "./$year/$month/";
-	my @dirs = grep {-d "./$year/$month/" && ! /^\.{1,2}$/} readdir($mydir);
+	my @dirs = sort { $b+0 <=> $a+0} grep {-d "./$year/$month/" && ! /^\.{1,2}$/} readdir($mydir);
 	closedir ($mydir);
 	foreach my $dir (@dirs) {
 		opendir my $d, "./$year/$month/$dir" or die "Cannot open directory:  ./$year/$month/$dir $!";

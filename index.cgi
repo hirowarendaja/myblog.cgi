@@ -85,7 +85,7 @@ if (-e "./pwd") {
     	if ($mday <10) {
                 $mday = "0".$mday;
     	}
-	ListEntryPlus ("./$this_year/$mon/$mday/$ts", 0);
+	ListEntryPlus ("./$this_year/$mon/$mday/", 0,$ts,$linkstr);
     } else {
 
        	ListBlog ($this_year, $mon, $linkstr);
@@ -130,7 +130,7 @@ sub ListEntryPlus {
  my $tohtml = shift;
  my $fn = shift; 
  my $linkstr = shift;
- print "<li><a href=\"?".$linkstr."ts=$fn\" title=\"".TimeStamp($fn)."\">[l]</a> ";
+ print "<li><a href=\"?".$linkstr."ts=".$fn."\" title=\"".TimeStamp($fn)."\">[l]</a> ";
  ListEntry ("$directory$fn", $tohtml);
 }
 
